@@ -1,0 +1,66 @@
+service: 
+  name: demo-nodejs-invoke-api-serverless
+
+custom:
+  serverless-offline:
+    port: 3000
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  #Api para Leer Api Externa
+  createVehicles:
+    handler: src/crud.handler.createVehicles
+    events:
+      - http:
+          path: crud/{id}
+          method: get
+
+  #Api para traducir json
+  translateVehicles:
+    handler: src/crud.handler.translateVehicles
+    events:
+      - http:
+          path: crud/translate/{id}
+          method: get
+  
+  #Api crear vehicle en db
+  createDbVehicles:
+    handler: src/crud.handler.createDbVehicles 
+    events:
+      - http:
+          path: vehicle 
+          method: post
+          cors: true
+
+  #Api listar todos los vehicles
+  getAllVehicles:
+    handler: src/crud.handler.getAllVehicles
+    events:
+     - http:
+         path: vehicles
+         method: get
+         cors: true
+  
+  #Api modificar vehicle en db
+  updateVehicle:
+    handler: src/crud.handler.updateVehicle
+    events:
+     - http:
+         path: vehicle/{id}
+         method: put
+         cors: true
+
+  #Api eliminar vehicle en db
+  deleteVehicle:
+    handler: src/crud.handler.deleteVehicle
+    events:
+     - http:
+         path: vehicle/{id}
+         method: delete
+         cors: true
+
+plugins:
+  - serverless-offline

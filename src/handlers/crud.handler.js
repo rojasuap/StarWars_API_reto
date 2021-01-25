@@ -23,8 +23,7 @@ module.exports.LeerExternoVehicles = (event, context, callback) => {
       
     const response = {
         statusCode: 200,
-       // body: JSON.stringify(crud),
-       body: crud,
+        body: crud,
     };
     
     callback(null, response);

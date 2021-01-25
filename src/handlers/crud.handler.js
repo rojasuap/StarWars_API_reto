@@ -6,10 +6,8 @@ const CrudService = require('../services/crud.service').CrudService;
 const connectToDatabase = require('../repositories/db');
 const Vehicle = require('../models/Vehicle');
 
-
 //Attributes
 let crudService = new CrudService();
-let crudModificado;
 
 //Handler Function
 
@@ -90,17 +88,12 @@ module.exports.createDbVehicles = (event, context, callback) => {
   //Declaración de variables
   let json = JSON.parse(event.body)
   let paramId;
-  var crudOriginal = [];
+  let crudOriginal = [];
+  let crudModificado;
   
   //Recuperando el id del post.
-  for (var id in json){
-    // Controlando que json realmente tenga esa propiedad
-    if (json.hasOwnProperty(id)) {
-      // Mostrando en pantalla la clave junto a su valor
-      paramId = json.id
-    }
-  }
-
+  paramId = json.id
+ 
   //traduciendo json
   crudService.generate(event.body, paramId)
   .then((crud)=> {         
@@ -127,17 +120,12 @@ module.exports.createDbVehicles = (event, context, callback) => {
           }
       }
   );
-  //recorrer el json origian y cambiar el key 
-  crudModified.forEach(element => crudModificado= element);
-    })
-  .catch((err) => {
-      console.log('info', 'ERROR' );
-      throw Boom.badRequest(err);
-  });
-    
+  //Setear json modificado
+  crudModificado = crudModified[0];  
+  
   //Registrando en Base de datos
-  connectToDatabase()
-    .then(() => {      
+    connectToDatabase()
+      .then(() => {      
       Vehicle.create(crudModificado)  
         .then(vehicle => callback(null, {
           statusCode: 200,
@@ -149,6 +137,11 @@ module.exports.createDbVehicles = (event, context, callback) => {
           body: 'Could not create the vehicle.'
         }));
     });
+  })
+  .catch((err) => {
+      console.log('info', 'ERROR' );
+      throw Boom.badRequest(err);
+  });    
 };
 
 //Listar vehicle
@@ -169,7 +162,6 @@ module.exports.getOneVehicle = (event, context, callback) => {
         }));
     });
 };
-
 
 //Listar todos los vehicles
 module.exports.getAllVehicles = (event, context, callback) => {

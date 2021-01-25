@@ -13,8 +13,8 @@ let crudModificado;
 
 //Handler Function
 
-//Función createVehicles
-module.exports.createVehicles = (event, context, callback) => {
+//Función PruebaLeer ApiExterna
+module.exports.LeerExternoVehicles = (event, context, callback) => {
   console.log('info', '[HANDLER] [MESSAGE] createVehicles -> id :: '+ event.pathParameters.id );
   let id = event.pathParameters.id
 
@@ -35,7 +35,7 @@ module.exports.createVehicles = (event, context, callback) => {
   });
 };
 
-//Función translateVehicles
+//Función PruebatranslateVehicles
 module.exports.translateVehicles = (event, context, callback) => {
   console.log('info', '[HANDLER] [MESSAGE] translateVehicles -> id :: '+ event.pathParameters.id );
   let id = event.pathParameters.id

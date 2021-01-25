@@ -11,8 +11,8 @@ provider:
 
 functions:
   #Api para Leer Api Externa
-  createVehicles:
-    handler: src/handlers/crud.handler.createVehicles
+  LeerExternoVehicles:
+    handler: src/handlers/crud.handler.LeerExternoVehicles
     events:
       - http:
           path: crud/{id}

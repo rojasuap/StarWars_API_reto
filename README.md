@@ -1,5 +1,5 @@
 # demo-nodejs-invoke-api-serverless
-Proyecto que ejecuta un servicio de invocación REST a la API de mensajes públicos [yesno.wtf](https://yesno.wtf/) y muestra su mensaje en un respuesta REST
+Proyecto que ejecuta un servicio de invocación REST a la API de prueba SWAPI
 
 ## Stack Tecnológico
 
@@ -17,7 +17,6 @@ Recomendación de elementos extra a instalar :
 * Visual Studio Code: https://code.visualstudio.com/
 * nvm: https://github.com/creationix/nvm
 * npm: https://www.npmjs.com/ (ver. 6.5.0)
-
 
 
 ## Instalación
@@ -206,8 +205,7 @@ let messageService = new MessageService();
 
 //Handler Function
 module.exports.createMessage = (event, context, callback) => {
-  console.log('info', '[HANDLER] [MESSAGE] createMessage ...');
-
+  
   messageService.generate(event.body)
   .then((message)=> {
       
@@ -264,22 +262,3 @@ Serverless: Routes for createMessage:
 Serverless: GET /message
 
 Serverless: Offline listening on http://localhost:3000
-```
-
-El proyecto quedaría listo para usarse
-
-
-### Ejemplo Práctio : "Invocar a una API Externa"
-
-Para ello se ha creado un modulo de gestión de mensajes en : src/messages donde se proporciona un servicio de invocación REST a la api de mensajes públicos [yesno.wtf](https://yesno.wtf/) devolviendo la respuesta
-
-Se puede ejecutar algo como lo siguiente
-GET http://localhost:3000/message
-
-Y se recibe una respuesta como la siguiente
-
-``` js
-"{\"answer\":\"yes\",\"forced\":false,\"image\":\"https://yesno.wtf/assets/yes/13-c3082a998e7758be8e582276f35d1336.gif\"}"
-```
-
-Revisar tambien los logs de la consola

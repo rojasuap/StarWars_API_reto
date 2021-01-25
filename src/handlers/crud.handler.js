@@ -2,13 +2,14 @@
 //Imports
 const Boom = require('boom');
 require('dotenv').config({ path: './variables.env' });
-const CrudService = require('./crud/crud.service').CrudService;
-const connectToDatabase = require('./db');
-const Vehicle = require('./models/Vehicle');
+const CrudService = require('../services/crud.service').CrudService;
+const connectToDatabase = require('../repositories/db');
+const Vehicle = require('../models/Vehicle');
 
 
 //Attributes
 let crudService = new CrudService();
+let crudModificado;
 
 //Handler Function
 
@@ -38,6 +39,7 @@ module.exports.createVehicles = (event, context, callback) => {
 module.exports.translateVehicles = (event, context, callback) => {
   console.log('info', '[HANDLER] [MESSAGE] translateVehicles -> id :: '+ event.pathParameters.id );
   let id = event.pathParameters.id
+  var crudTraducido;
 
   crudService.generate(event.body, id)
   .then((crud)=> {
@@ -66,13 +68,12 @@ module.exports.translateVehicles = (event, context, callback) => {
           }
       }
   );  
-
-  var crudModificado;
-  crudModified.forEach(element => crudModificado= element);
+  
+  crudModified.forEach(element => crudTraducido= element);
     
     const response = {
         statusCode: 200,
-        body: JSON.stringify(crudModificado)
+        body: JSON.stringify(crudTraducido)
     };
     
     callback(null, response);
@@ -102,7 +103,6 @@ module.exports.createDbVehicles = (event, context, callback) => {
   }
 
   //traduciendo json
-  let crudModificado;
   crudService.generate(event.body, paramId)
   .then((crud)=> {         
     crudOriginal.push(JSON.parse(crud))    
@@ -135,11 +135,11 @@ module.exports.createDbVehicles = (event, context, callback) => {
       console.log('info', 'ERROR' );
       throw Boom.badRequest(err);
   });
-  
+    
   //Registrando en Base de datos
   connectToDatabase()
-    .then(() => {
-      Vehicle.create(crudModificado)
+    .then(() => {      
+      Vehicle.create(crudModificado)  
         .then(vehicle => callback(null, {
           statusCode: 200,
           body: JSON.stringify(vehicle)
@@ -148,6 +148,25 @@ module.exports.createDbVehicles = (event, context, callback) => {
           statusCode: err.statusCode || 500,
           headers: { 'Content-Type': 'text/plain' },
           body: 'Could not create the vehicle.'
+        }));
+    });
+};
+
+//Listar vehicle
+module.exports.getOneVehicle = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
+  connectToDatabase()
+    .then(() => {
+      Vehicle.findById(event.pathParameters.id)
+        .then(vehicle => callback(null, {
+          statusCode: 200,
+          body: JSON.stringify(vehicle)
+        }))
+        .catch(err => callback(null, {
+          statusCode: err.statusCode || 500,
+          headers: { 'Content-Type': 'text/plain' },
+          body: 'Could not fetch the vehicle.'
         }));
     });
 };
@@ -206,7 +225,7 @@ module.exports.deleteVehicle = (event, context, callback) => {
         .catch(err => callback(null, {
           statusCode: err.statusCode || 500,
           headers: { 'Content-Type': 'text/plain' },
-          body: 'Could not fetch the vehicles.'
+          body: 'Could not fetch the vehicle.'
         }));
     });
 };

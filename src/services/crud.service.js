@@ -2,7 +2,7 @@
 //Imports
 const Request = require('request');
 
-const CrudConfig = require('./crud.config');
+const CrudConfig = require('../settings/crud.config');
 
 class CrudService {
 
@@ -28,7 +28,7 @@ class CrudService {
     }
 
     generate(payload, id) {
-        console.log('info', '[SERVICE] [MESSAGE] generate -> url: ' + CrudConfig.API_SWAPI_OPTIONS.endpoint +  id + '/');
+        //console.log('info', '[SERVICE] [MESSAGE] generate -> url: ' + CrudConfig.API_SWAPI_OPTIONS.endpoint +  id + '/');
         return this.invokeURL(CrudConfig.API_SWAPI_OPTIONS.endpoint + '/'+ id + '/',payload)
     }
 

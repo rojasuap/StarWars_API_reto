@@ -12,7 +12,7 @@ provider:
 functions:
   #Api para Leer Api Externa
   createVehicles:
-    handler: src/crud.handler.createVehicles
+    handler: src/handlers/crud.handler.createVehicles
     events:
       - http:
           path: crud/{id}
@@ -20,7 +20,7 @@ functions:
 
   #Api para traducir json
   translateVehicles:
-    handler: src/crud.handler.translateVehicles
+    handler: src/handlers/crud.handler.translateVehicles
     events:
       - http:
           path: crud/translate/{id}
@@ -28,16 +28,25 @@ functions:
   
   #Api crear vehicle en db
   createDbVehicles:
-    handler: src/crud.handler.createDbVehicles 
+    handler: src/handlers/crud.handler.createDbVehicles 
     events:
       - http:
           path: vehicle 
           method: post
           cors: true
+  
+  #Api listar un vehicle
+  getOneVehicle:
+    handler: src/handlers/crud.handler.getOneVehicle 
+    events:
+      - http:
+          path: vehicle/{id} 
+          method: get
+          cors: true
 
   #Api listar todos los vehicles
   getAllVehicles:
-    handler: src/crud.handler.getAllVehicles
+    handler: src/handlers/crud.handler.getAllVehicles
     events:
      - http:
          path: vehicles
@@ -46,7 +55,7 @@ functions:
   
   #Api modificar vehicle en db
   updateVehicle:
-    handler: src/crud.handler.updateVehicle
+    handler: src/handlers/crud.handler.updateVehicle
     events:
      - http:
          path: vehicle/{id}
@@ -55,7 +64,7 @@ functions:
 
   #Api eliminar vehicle en db
   deleteVehicle:
-    handler: src/crud.handler.deleteVehicle
+    handler: src/handlers/crud.handler.deleteVehicle
     events:
      - http:
          path: vehicle/{id}
